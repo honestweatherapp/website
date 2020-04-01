@@ -1,21 +1,32 @@
-import React from "react"
-import { Link } from "gatsby"
+import React, { useState, useEffect } from "react"
+import styled from "styled-components"
+import axios from "axios"
 
 import Layout from "../components/layout"
-import Image from "../components/image"
 import SEO from "../components/seo"
+import { usePosition } from "../components/usePosition"
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const IndexPage = () => {
+  const { latitude, longitude, lang, error } = usePosition()
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    if (longitude && latitude && lang)
+      axios
+        .get(
+          `https://honestweather-api.herokuapp.com/api/v1/weather?long=${longitude}&lat=${latitude}&lang=${lang}&units=metric`
+        )
+        .then(json => {
+          setData(json.data)
+        })
+  }, [longitude, latitude, lang])
+
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <h1>{data.message}</h1>
+    </Layout>
+  )
+}
 
 export default IndexPage
