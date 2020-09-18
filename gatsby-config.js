@@ -3,6 +3,7 @@ module.exports = {
     title: `HonestWeather`,
     description: `The only app that will tell you what the weather really is.`,
     author: `@honestweatherapp`,
+    url: `https://honestweather.ml`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
